@@ -2,6 +2,7 @@ import { Controller, Post, Body, UploadedFile, UseInterceptors } from "@nestjs/c
 import { FileInterceptor } from "@nestjs/platform-express";
 import { AppService } from "./app.service";
 import { isPlainObject } from "./helper";
+import axios from "axios";
 
 @Controller()
 export class AppController {
@@ -30,15 +31,15 @@ export class AppController {
     const limit = body.limit || 10;
     const page = Math.min(body.page || 1, Math.ceil(total / limit));
 
-    const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+    const response = await axios.request({
       headers: {
         "content-type": "application/json",
       },
       method: "GET",
-      mode: "cors",
+      url: "https://jsonplaceholder.typicode.com/posts",
     });
     try {
-      const list = await response.json();
+      const list = response.data;
 
       return {
         data: {
