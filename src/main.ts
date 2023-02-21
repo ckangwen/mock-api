@@ -3,12 +3,9 @@ import { AppModule } from "./app.module";
 import { AuthMiddleware } from "./app.middleware";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { cors: true });
   app.setGlobalPrefix("mock-api");
   app.use(AuthMiddleware);
-  app.enableCors({
-    origin: "*",
-  });
   await app.listen(3000);
 }
 bootstrap();

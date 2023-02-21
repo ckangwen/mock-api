@@ -24,6 +24,44 @@ export class AppController {
     });
   }
 
+  @Post("/user/list")
+  async getUsers(@Body() body: { page?: number; limit?: number }) {
+    const total = 100;
+    const limit = body.limit || 10;
+    const page = Math.min(body.page || 1, Math.ceil(total / limit));
+
+    const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+      headers: {
+        "content-type": "application/json",
+      },
+      method: "GET",
+      mode: "cors",
+    });
+    try {
+      const list = await response.json();
+
+      return {
+        data: {
+          page,
+          total: 100,
+          list: list.slice((page - 1) * limit, page * limit),
+        },
+        message: "Fail",
+        status: 0,
+      };
+    } catch (e) {
+      return {
+        data: {
+          page: 0,
+          total: 0,
+          list: [],
+        },
+        message: "Fail",
+        status: 0,
+      };
+    }
+  }
+
   @Post("/tool/upimg")
   @UseInterceptors(FileInterceptor("file"))
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
