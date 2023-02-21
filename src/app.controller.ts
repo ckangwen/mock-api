@@ -47,8 +47,8 @@ export class AppController {
           total: 100,
           list: list.slice((page - 1) * limit, page * limit),
         },
-        message: "Fail",
-        status: 0,
+        message: "Success",
+        status: 1,
       };
     } catch (e) {
       return {
